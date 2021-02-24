@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="2020-23-12-15-00" author="Kirill Tereshkin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="song"/>
+            </not>
+        </preConditions>
+        <comment>create table "song"</comment>
+        <createTable tableName="song">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="name_of_the_song" type="VARCHAR(255)"/>
+            <column name="singer_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="publication_date" type="DATE"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="2020-29-12-16-30" author="Kirill Tereshkin">
+        <preConditions>
+            <not>
+                <tableExists tableName="singer"/>
+            </not>
+        </preConditions>
+        <comment>create table "singer"</comment>
+        <createTable tableName="singer">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="singer" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="2020-29-12-16-35" author="Kirill Tereshkin">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="song_singer_id_fk"/>
+            </not>
+        </preConditions>
+        <comment>create foreignKey</comment>
+        <addForeignKeyConstraint baseTableName="song"
+                                 baseColumnNames="singer_id"
+                                 constraintName="song_singer_id_fk"
+                                 referencedTableName="singer"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>
